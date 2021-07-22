@@ -103,7 +103,6 @@ for i in ["1382", "1383", "1400", "1401", "1408", "1429", "1430", "1431", "1433"
           "9427", "9428", "9443", "9444", "9445", "9446", "9450", "9466", "9467", "9514", "9517", "9519"]:
     try:
         print(i)
-        table = []
         url = "https://minkabu.jp/stock/" + str(i) + "/ipo"
 
         response = requests.get(url, headers=headers)
@@ -112,23 +111,36 @@ for i in ["1382", "1383", "1400", "1401", "1408", "1429", "1430", "1431", "1433"
         item = []
         value = []
 
-        for fundamental in soup.find_all('dl', class_="md_data_list vertical ly_row")[0]:
-            dt = fundamental.find_all("dt", class_="ly_col ly_colsize_2")
-            dd = fundamental.find_all("dd", class_="ly_col tar ly_colsize_4")
-            for a in dt:
-                item.append(a)
+        for fundamental in soup.find_all('dl', class_="md_data_list vertical ly_row"):
+            #print(fundamental)
+            #dt = fundamental.find_all("dt")
+            dd = fundamental.find_all("dd")
+            #for a in dt:
+                #item.append(a.text)
             for b in dd:
-                value.append(b)
+                value.append(b.text)
+        for info in soup.find_all('dl', class_="md_data_list vertical ly_row mt10"):
 
-        table['基本情報＿項目名'] = item
-        table['基本情報＿値'] = value
-        Result = pd.DataFrame(table)
+            #print(fundamental)
+            #dt = fundamental.find_all("dt")
+            cc = info.find_all("dd")
+            #for a in dt:
+                #item.append(a.text)
+            for c in cc:
+                value.append(c.text)
 
-        Result.to_csv(r"C:\Users\Ray94\OneDrive\Research\PHD\Research\data\japan_IPO\基本情報\\" + str(i) + "_基本情報.csv", mode='a',
+        print(value)
+        #table = list(zip(item, value))
+        #Result = pd.DataFrame(table)
+        Result = pd.DataFrame([value])
+
+        print(Result)
+
+        Result.to_csv(r"C:\\Users\Ray94\OneDrive\Research\PHD\Research\data\japan_IPO\基本情報\\基本情報.csv", mode='a',
                       index=False, header=None, encoding="utf-8_sig")
         time.sleep(3)
     except Exception as e:
         Error = pd.DataFrame([[str(i), str(e)]])
-        Error.to_csv(r"C:\Users\Ray94\OneDrive\Research\PHD\Research\data\japan_IPO\基本情報\error_基本情報.csv", mode='a', index=False, header=None,
+        Error.to_csv(r"C:\\Users\Ray94\OneDrive\Research\PHD\Research\data\japan_IPO\基本情報\error_基本情報.csv", mode='a', index=False, header=None,
                      encoding="utf-8_sig")
         pass
