@@ -1,12 +1,6 @@
-import time  # 時刻に関するさまざまな関数を使用するためのパッケージ
-import pandas as pd  # データ解析を容易にする機能を提供する
-import requests  # WEBスクレイピングでHTMLファイルからデータを取得するのに使われる
-from bs4 import BeautifulSoup  # 取得したHTMLファイルをさらに解析するライブラリ
-import os
+import pandas as pd  # excel data操作要パッケージを導入
+import time
 
-headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36',
-}
 for i in ["1382", "1383", "1400", "1401", "1408", "1429", "1430", "1431", "1433", "1435", "1436", "1439", "1446",
           "1449", "1450", "1711", "1712", "1729", "2120", "2121", "2122", "2123", "2124", "2126", "2127", "2128",
           "2130", "2132", "2133", "2134", "2135", "2136", "2137", "2138", "2139", "2140", "2142", "2143", "2144",
@@ -103,32 +97,17 @@ for i in ["1382", "1383", "1400", "1401", "1408", "1429", "1430", "1431", "1433"
           "9427", "9428", "9443", "9444", "9445", "9446", "9450", "9466", "9467", "9514", "9517", "9519"]:
     try:
         print(i)
-        table = []
         url = "https://minkabu.jp/stock/" + str(i) + "/ipo"
-
-        response = requests.get(url, headers=headers)
-        response.encoding = response.apparent_encoding
-        soup = BeautifulSoup(response.text, 'html.parser')
-        item = []
-        value = []
-
-        for fundamental in soup.find_all('dl', class_="md_data_list vertical ly_row")[0]:
-            dt = fundamental.find_all("dt", class_="ly_col ly_colsize_2")
-            dd = fundamental.find_all("dd", class_="ly_col tar ly_colsize_4")
-            for a in dt:
-                item.append(a)
-            for b in dd:
-                value.append(b)
-
-        table['基本情報＿項目名'] = item
-        table['基本情報＿値'] = value
+        dfs = pd.read_html(url)
+        # print(len(dfs))
+        table = dfs[4]
         Result = pd.DataFrame(table)
-
-        Result.to_csv(r"C:\Users\Ray94\OneDrive\Research\PHD\Research\data\japan_IPO\基本情報\\" + str(i) + "_基本情報.csv", mode='a',
+        Result.to_csv(r"C:\Users\Ray94\OneDrive\Research\PHD\Research\data\japan_IPO\主要株主\\" + str(i) + "_主要株主.csv", mode='a',
                       index=False, header=None, encoding="utf-8_sig")
-        time.sleep(3)
+        time.sleep(10)
     except Exception as e:
         Error = pd.DataFrame([[str(i), str(e)]])
-        Error.to_csv(r"C:\Users\Ray94\OneDrive\Research\PHD\Research\data\japan_IPO\基本情報\error_基本情報.csv", mode='a', index=False, header=None,
+        Error.to_csv(r"C:\Users\Ray94\OneDrive\Research\PHD\Research\data\japan_IPO\主要株主\error_主要株主.csv", mode='a', index=False, header=None,
                      encoding="utf-8_sig")
         pass
+
