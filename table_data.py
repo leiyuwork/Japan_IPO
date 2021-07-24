@@ -117,17 +117,16 @@ for i in ["6189", "4824", "9399", "4596", "4784", "4800", "8626", "8889", "4849"
 
         Result = pd.DataFrame([value])
 
-        Result.to_csv(r"C:\\Users\Ray94\OneDrive\Research\PHD\Research\data\japan_IPO\基本情報\\主要株主_Yu_20210724_Ver1.0.csv",
+        Result.to_csv(r"C:\\Users\Ray94\OneDrive\Research\PHD\Research\data\japan_IPO\基本情報\\データ_Yu_20210724_Ver1.0.csv",
                       mode='a',
                       index=False, header=None, encoding="utf-8_sig")
         time.sleep(20)
 
     except Exception as e:
-
         Error = pd.DataFrame([[str(i), "データなし"]])
         print(e)
         Error.to_csv(
-            r"C:\\Users\Ray94\OneDrive\Research\PHD\Research\data\japan_IPO\基本情報\\主要株主_Yu_20210724_Ver1.0.csv",
+            r"C:\\Users\Ray94\OneDrive\Research\PHD\Research\data\japan_IPO\基本情報\\データ_Yu_20210724_Ver1.0.csv",
             mode='a',
             index=False, header=None,
             encoding="utf-8_sig")
